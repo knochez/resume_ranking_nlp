@@ -1,0 +1,15 @@
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+scikit-learn
+nltk
+sentence-transformers>=4.0
+transformers>=4.41
+datasets>=2.19
+accelerate>=1.1.0
+torch
+pytest
+black
+ruff

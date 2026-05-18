@@ -1,0 +1,14 @@
+resume.csv
+data/processed/
+.venv/
+__pycache__/
+*.pyc
+*.npy
+*.joblib
+.ipynb_checkpoints/
+outputs/figures/
+outputs/metrics/
+*.egg-info/
+.pytest_cache/
+.claude/
+CLAUDE.md
