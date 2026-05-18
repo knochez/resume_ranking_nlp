@@ -1,12 +1,12 @@
 # ResumeFit — An NLP Method for Resume Screening
 
-**ResumeFit** scores how well a résumé matches a job description (JD) and ranks
+**ResumeFit** scores how well a resume matches a job description (JD) and ranks
 candidates for a role. It benchmarks three NLP approaches of increasing
 sophistication against a recruiter-assigned ground-truth score.
 
 ## Why this matters
 
-Recruiters spend just **1–8 seconds** looking at a résumé before deciding
+Recruiters spend just **6–8 seconds** looking at a resume before deciding
 whether to keep or discard it (a widely cited eye-tracking study puts the
 average at ~7.4 seconds — [Ladders, 2018](https://www.theladders.com/static/images/basicSite/pdfs/TheLadders-EyeTracking-StudyC2.pdf)).
 At that pace, strong candidates are routinely missed and screening is
@@ -19,7 +19,7 @@ quantitative match score so the first-pass shortlist is fast *and* consistent.
 |---|--------|--------|-------------|
 | 1 | **TF-IDF + cosine similarity** — sparse lexical baseline. Fast and interpretable, blind to paraphrase. | Lexical | No |
 | 2 | **SBERT bi-encoder + cosine** (`all-MiniLM-L6-v2`) — each side encoded independently; captures meaning beyond word overlap. | Dense | No |
-| 3 | **Fine-tuned cross-encoder** (`ms-marco-MiniLM-L-6-v2`) — trained directly on the match score with MSE loss; attends jointly across résumé and JD. | Pair model | **Yes** |
+| 3 | **Fine-tuned cross-encoder** (`ms-marco-MiniLM-L-6-v2`) — trained directly on the match score with MSE loss; attends jointly across resume and JD. | Pair model | **Yes** |
 
 ## Results (held-out test set)
 
@@ -40,10 +40,9 @@ correlation over SBERT.
 ## Dataset
 
 [Kaggle Resume Dataset](https://www.kaggle.com/datasets/saugataroyarghya/resume-dataset/data)
-(`saugataroyarghya/resume-dataset`). Each row is one (résumé, JD) pair across
+(`saugataroyarghya/resume-dataset`). Each row is one (resume, JD) pair across
 ~34 feature columns plus `matched_score` (float, ~0–1) as the ground-truth
-label. Place the CSV at `datasets/resume.csv` — it is **gitignored** and not
-committed.
+label. 
 
 ## Repository layout
 
@@ -65,7 +64,7 @@ nlp_a3_g92/
 │   ├── figures/               # plots from the notebook
 │   └── metrics/               # comparison_summary.csv, scored_pairs.csv
 ├── requirements.txt
-└── datasets/resume.csv        # dataset (gitignored, add manually)
+└── datasets/resume.csv        # dataset 
 ```
 
 The notebook is **pure orchestration** — every function lives in `src/` and is
@@ -98,14 +97,14 @@ The task is **dual-framed**, both consuming the same similarity scores:
 
 - **Regression** — predict `matched_score`. Metrics: MAE, RMSE, Pearson r,
   Spearman ρ.
-- **Ranking** — group rows by JD; for each JD with ≥2 résumés, rank them.
-  Metrics: NDCG@10, Precision@10, MRR. Résumés with `matched_score` ≥ the
+- **Ranking** — group rows by JD; for each JD with ≥2 resumes, rank them.
+  Metrics: NDCG@10, Precision@10, MRR. resumes with `matched_score` ≥ the
   dataset median are treated as relevant for the binary metrics.
 
 ## Limitations
 
 - **Sequence truncation** — the cross-encoder truncates at 384 tokens; long
-  résumés lose late-section content.
+  resumes lose late-section content.
 - **JD leakage** — the i.i.d. split lets JDs recur across train/test; a
   by-JD split would give a stricter, more honest number.
 - **Inference cost** — the cross-encoder is O(N·M); production would use SBERT
